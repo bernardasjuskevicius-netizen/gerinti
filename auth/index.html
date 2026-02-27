@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="lt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="robots" content="noindex" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>gerinti.lt – Prisijungimas</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:40px;background:#f6fffd;color:#0b1f1d}
+    .box{max-width:520px;padding:18px 18px;border:1px solid rgba(9,42,38,.12);border-radius:14px;background:#fff}
+    button{padding:10px 12px;border-radius:10px;border:1px solid rgba(9,42,38,.16);background:#11b3a8;color:#fff;font-weight:700;cursor:pointer}
+    p{line-height:1.55;color:rgba(11,31,29,.75)}
+    code{background:#eef; padding:2px 6px; border-radius:6px}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>Prisijungimas / slaptažodis</h1>
+    <p>Šitas puslapis skirtas invite / recovery nuorodoms. Jei langas neatsidaro automatiškai – spausk mygtuką.</p>
+    <button onclick="window.netlifyIdentity && window.netlifyIdentity.open()">Atidaryti prisijungimą</button>
+    <p style="margin-top:12px;">Jei atėjai per kvietimą, URL turi turėti <code>#invite_token=...</code>.</p>
+  </div>
+
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", function () {
+        // automatiškai atidaro widget'ą (invite/recovery atvejams)
+        window.netlifyIdentity.open();
+      });
+      window.netlifyIdentity.init();
+    }
+  </script>
+</body>
+</html>
