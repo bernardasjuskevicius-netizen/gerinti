@@ -1,0 +1,21 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
+
+collections:
+  - name: "straipsniai"
+    label: "Straipsniai"
+    label_singular: "Straipsnis"
+    folder: "content/straipsniai"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { label: "Pavadinimas", name: "title", widget: "string" }
+      - { label: "Santrauka", name: "summary", widget: "text", required: false }
+      - { label: "Kategorija", name: "category", widget: "select", options: ["Statyba","Inžinerija","Energija","Miestas"], required: false }
+      - { label: "Turinys", name: "body", widget: "markdown" }
