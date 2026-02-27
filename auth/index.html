@@ -7,29 +7,77 @@
   <title>gerinti.lt – Prisijungimas</title>
   <style>
     body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:40px;background:#f6fffd;color:#0b1f1d}
-    .box{max-width:520px;padding:18px 18px;border:1px solid rgba(9,42,38,.12);border-radius:14px;background:#fff}
-    button{padding:10px 12px;border-radius:10px;border:1px solid rgba(9,42,38,.16);background:#11b3a8;color:#fff;font-weight:700;cursor:pointer}
+    .box{max-width:560px;padding:18px;border:1px solid rgba(9,42,38,.12);border-radius:14px;background:#fff}
+    .btn{
+      display:inline-block;
+      padding:10px 14px;
+      border-radius:12px;
+      border:1px solid rgba(9,42,38,.16);
+      background:#11b3a8;
+      color:#fff;
+      font-weight:800;
+      cursor:pointer;
+      text-decoration:none;
+      user-select:none;
+    }
     p{line-height:1.55;color:rgba(11,31,29,.75)}
-    code{background:#eef; padding:2px 6px; border-radius:6px}
+    .status{margin-top:10px;font-size:13px;color:rgba(11,31,29,.65)}
+    code{background:#eef;padding:2px 6px;border-radius:6px}
   </style>
 </head>
 <body>
   <div class="box">
     <h1>Prisijungimas / slaptažodis</h1>
-    <p>Šitas puslapis skirtas invite / recovery nuorodoms. Jei langas neatsidaro automatiškai – spausk mygtuką.</p>
-    <button onclick="window.netlifyIdentity && window.netlifyIdentity.open()">Atidaryti prisijungimą</button>
-    <p style="margin-top:12px;">Jei atėjai per kvietimą, URL turi turėti <code>#invite_token=...</code>.</p>
+    <p>Šitas puslapis skirtas invite / recovery nuorodoms. Jei atėjai per kvietimą – URL turi turėti <code>#invite_token=...</code>.</p>
+
+    <a class="btn" href="#" id="openBtn">Atidaryti prisijungimą</a>
+    <div class="status" id="status">Kraunasi Identity widget…</div>
   </div>
 
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <script>
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", function () {
-        // automatiškai atidaro widget'ą (invite/recovery atvejams)
+    (function () {
+      const statusEl = document.getElementById("status");
+      const btn = document.getElementById("openBtn");
+
+      function setStatus(msg){ statusEl.textContent = msg; }
+
+      function openWidget(){
+        if (!window.netlifyIdentity) {
+          setStatus("❌ Identity widget neužsikrovė (greičiausiai blokuoja adblock/extension arba tinklas).");
+          return;
+        }
+        // jei yra invite/recovery tokenas – widgetas pats jį apdoroja
         window.netlifyIdentity.open();
+        setStatus("✅ Identity langas turėtų būti atsidaręs (jei ne – patikrink ar ne už kito lango).");
+      }
+
+      btn.addEventListener("click", function(e){
+        e.preventDefault();
+        openWidget();
       });
+
+      if (!window.netlifyIdentity) {
+        setStatus("❌ Identity widget neužsikrovė (blokuojamas).");
+        return;
+      }
+
+      window.netlifyIdentity.on("init", function() {
+        setStatus("✅ Identity widget užsikrovė. Gali spausti mygtuką.");
+        // jei ateini su tokenu – atidaryk automatiškai
+        const h = window.location.hash || "";
+        if (h.includes("invite_token") || h.includes("recovery_token") || h.includes("confirmation_token")) {
+          openWidget();
+        }
+      });
+
+      window.netlifyIdentity.on("login", function() {
+        // po sėkmingo prisijungimo permesk į CMS
+        window.location.href = "/admin/";
+      });
+
       window.netlifyIdentity.init();
-    }
+    })();
   </script>
 </body>
 </html>
