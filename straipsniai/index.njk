@@ -1,0 +1,41 @@
+---
+layout: base.njk
+title: Straipsniai
+summary: Praktiniai tekstai apie statybą, inžineriją, energiją ir miestą – su aiškiais veiksmais.
+permalink: /straipsniai/index.html
+---
+<main class="wrap">
+  <section class="page">
+    <h1>Straipsniai</h1>
+    <p>Čia atsiras visi įrašai, kuriuos sukuri per /admin → Straipsniai.</p>
+
+    <div class="list">
+      {% if collections.straipsniai and collections.straipsniai.length %}
+        {% for post in collections.straipsniai | reverse %}
+          <div class="item">
+            <div>
+              <strong><a href="{{ post.url }}">{{ post.data.title }}</a></strong>
+              {% if post.data.summary %}
+                <div style="color:rgba(11,31,29,.70);line-height:1.45">{{ post.data.summary }}</div>
+              {% endif %}
+            </div>
+            {% if post.data.category %}
+              <span class="badge">{{ post.data.category }}</span>
+            {% else %}
+              <span class="badge">Straipsnis</span>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="item">
+          <div>
+            <strong>Kol kas nėra įrašų</strong>
+            <div style="color:rgba(11,31,29,.70);line-height:1.45">Sukurk pirmą per /admin → Straipsniai → New Straipsnis → Publish.</div>
+          </div>
+          <span class="badge">Startas</span>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+  <footer>© 2026 gerinti.lt</footer>
+</main>

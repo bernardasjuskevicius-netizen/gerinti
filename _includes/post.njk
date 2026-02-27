@@ -1,0 +1,15 @@
+---
+layout: base.njk
+---
+<main class="wrap">
+  <section class="page">
+    <h1>{{ title }}</h1>
+    {% if summary %}<p>{{ summary }}</p>{% endif %}
+    {% if category %}<div style="margin:12px 0;"><span class="badge">{{ category }}</span></div>{% endif %}
+    <div class="content">
+      {{ content | safe }}
+    </div>
+    <p style="margin-top:14px"><a class="go" href="/straipsniai/">← Visi straipsniai</a></p>
+  </section>
+  <footer>© 2026 gerinti.lt</footer>
+</main>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="lt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ title }} · gerinti.lt</title>
+  {% if summary %}<meta name="description" content="{{ summary | safe }}" />{% endif %}
+  <meta name="theme-color" content="#11b3a8" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/cms.css" />
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="/">gerinti.lt</a>
+      <nav aria-label="Pagrindinis meniu">
+        <a href="/statyba/">Statyba</a>
+        <a href="/inzinerija/">Inžinerija</a>
+        <a href="/energija/">Energija</a>
+        <a href="/miestas/">Miestas</a>
+        <a href="/irankiai/">Įrankiai</a>
+        <a href="/straipsniai/">Straipsniai</a>
+      </nav>
+      <div class="kebab" title="Meniu (vėliau)">…</div>
+    </div>
+  </div>
+</header>
+
+{{ content | safe }}
+
+<script src="/assets/site.js"></script>
+</body>
+</html>
