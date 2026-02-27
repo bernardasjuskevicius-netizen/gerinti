@@ -19,7 +19,9 @@
       cursor:pointer;
       text-decoration:none;
       user-select:none;
+      margin-right:10px;
     }
+    .btn.secondary{background:#fff;color:#0b1f1d}
     p{line-height:1.55;color:rgba(11,31,29,.75)}
     .status{margin-top:10px;font-size:13px;color:rgba(11,31,29,.65)}
     code{background:#eef;padding:2px 6px;border-radius:6px}
@@ -31,6 +33,8 @@
     <p>Šitas puslapis skirtas invite / recovery nuorodoms. Jei atėjai per kvietimą – URL turi turėti <code>#invite_token=...</code>.</p>
 
     <a class="btn" href="#" id="openBtn">Atidaryti prisijungimą</a>
+    <a class="btn secondary" href="/admin/" id="goAdmin" style="display:none;">Eiti į /admin</a>
+
     <div class="status" id="status">Kraunasi Identity widget…</div>
   </div>
 
@@ -38,7 +42,8 @@
   <script>
     (function () {
       const statusEl = document.getElementById("status");
-      const btn = document.getElementById("openBtn");
+      const openBtn = document.getElementById("openBtn");
+      const goAdmin = document.getElementById("goAdmin");
 
       function setStatus(msg){ statusEl.textContent = msg; }
 
@@ -47,12 +52,11 @@
           setStatus("❌ Identity widget neužsikrovė (greičiausiai blokuoja adblock/extension arba tinklas).");
           return;
         }
-        // jei yra invite/recovery tokenas – widgetas pats jį apdoroja
         window.netlifyIdentity.open();
         setStatus("✅ Identity langas turėtų būti atsidaręs (jei ne – patikrink ar ne už kito lango).");
       }
 
-      btn.addEventListener("click", function(e){
+      openBtn.addEventListener("click", function(e){
         e.preventDefault();
         openWidget();
       });
@@ -62,19 +66,21 @@
         return;
       }
 
-      window.netlifyIdentity.on("init", function() {
+      window.netlifyIdentity.on("init", function(user) {
+        if (user) {
+          setStatus("✅ Jau prisijungta. Gali eiti į /admin/.");
+          goAdmin.style.display = "inline-block";
+          return; // NIEKO neredirectinam automatiškai
+        }
         setStatus("✅ Identity widget užsikrovė. Gali spausti mygtuką.");
-        // jei ateini su tokenu – atidaryk automatiškai
         const h = window.location.hash || "";
         if (h.includes("invite_token") || h.includes("recovery_token") || h.includes("confirmation_token")) {
           openWidget();
         }
       });
 
-      window.netlifyIdentity.on("login", function() {
-        // po sėkmingo prisijungimo permesk į CMS
-        window.location.href = "/admin/";
-      });
+      // SVARBU: jokio auto redirect on login
+      // window.netlifyIdentity.on("login", ... ) – tyčia nenaudojam.
 
       window.netlifyIdentity.init();
     })();
